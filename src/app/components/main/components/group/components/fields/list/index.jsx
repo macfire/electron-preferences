@@ -169,8 +169,6 @@ class ListField extends React.Component {
 
 	addBulk() {
 
-		// Console.log('addBulk()');
-
 		this.choose();
 
 	}
@@ -202,28 +200,6 @@ class ListField extends React.Component {
 
 		}
 
-		console.log('file', file);
-
-		// Api.readSwatchFile(file).then(
-		// 	_data => {
-		//
-		// 		console.log('data', _data);
-		//
-		// 	},
-		// 	_error => {
-		//
-		// 		console.error('data', _error);
-		//
-		// 	},
-		// );
-
-		// let results = api?.readSwatchFile(file).then(
-		// 	(_data, _more) => {
-		//
-		// 		console.log('returned data', _data, _more);
-		//
-		// 	},
-		// );
 		const results = api?.readSwatchFile(file);
 
 		if (!results) {
@@ -233,8 +209,6 @@ class ListField extends React.Component {
 		}
 
 		if (results.length > 0) {
-
-			console.log('results', results);
 
 			const arr = results.trim().split('\n');
 

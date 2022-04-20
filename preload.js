@@ -12,6 +12,5 @@ contextBridge.exposeInMainWorld('api', {
 	setPreferences: preferences => ipcRenderer.send('setPreferences', preferences),
 	showOpenDialog: dialogOptions => ipcRenderer.sendSync('showOpenDialog', dialogOptions),
 	sendButtonClick: channel => ipcRenderer.sendSync('sendButtonClick', channel),
-	// readSwatchFile: _path => ipcRenderer.invoke('readFile', _path),
 	readSwatchFile: _path => ipcRenderer.sendSync('readFile', _path),
 });
