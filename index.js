@@ -156,9 +156,6 @@ class ElectronPreferences extends EventEmitter2 {
 
 		ipcMain.on('readFile', (event, _path) => {
 
-			console.log('event', event);
-			console.log('_path', _path);
-
 			fs.readFile(_path, 'utf-8', (err, data) => {
 
 				if (err) {
