@@ -9,6 +9,7 @@ const ElectronPreferences = require('../');
 const preferences = new ElectronPreferences({
 	css: 'custom-style.css',
 	dataStore: path.resolve(__dirname, 'preferences.json'),
+
 	defaults: {
 		notes: {
 			folder: path.resolve(os.homedir(), 'Notes'),
@@ -17,9 +18,14 @@ const preferences = new ElectronPreferences({
 			firstName: 'Pieter-Jan',
 			lastName: 'Van Robays',
 		},
+		theme: {
+			swatches: [ '#4D4D4D', '#999999', '#FFFFFF', '#F44E3B' ],
+		},
 		// ...
 	},
-	debug: false, // True will open the dev tools
+
+	debug: true, // True will open the dev tools
+
 	webPreferences: {
 		webSecurity: true,
 	},
@@ -273,6 +279,12 @@ const preferences = new ElectronPreferences({
 									{ label: 'Dark', value: 'dark' },
 								],
 								help: 'Light or dark theme?',
+							},
+							{ label: 'Swatches',
+								key: 'swatches',
+								type: 'list',
+								orderable: true,
+								allowBulk: true,
 							},
 						],
 					},

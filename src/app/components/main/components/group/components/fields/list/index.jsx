@@ -1,3 +1,4 @@
+/* global api */
 'use strict';
 
 import React from 'react';
@@ -23,6 +24,7 @@ class ListField extends React.Component {
 		this.itemToAddChanged = this.itemToAddChanged.bind(this);
 		this.selectItem = this.selectItem.bind(this);
 		this.saveItem = this.saveItem.bind(this);
+		this.addBulk = this.addBulk.bind(this);
 
 	}
 
@@ -30,52 +32,64 @@ class ListField extends React.Component {
 
 		return (
 			<div className={`field field-list key-${this.field.key}`}>
-				<div className="field-label" aria-label={ this.label }>{ this.label }</div>
+				<div className="field-label" aria-label={this.label}>{this.label}</div>
 				<div>
 					<div>
-						<select style={ this.style } className="ep-list" size={ this.size } onChange={ this.selectItem.bind(this) }>
+						<select style={this.style} className="ep-list" size={this.size} onChange={this.selectItem.bind(this)}>
 							{
 								this.value.map((item, index) => {
 
 									if (index === this.state.selectedIndex) {
 
-										return (<option selected value={item} key={index} aria-label={ item }>{item}</option>);
+										return (<option selected value={item} key={index} aria-label={item}>{item}</option>);
 
 									}
 
-									return (<option value={item} key={index} aria-label={ item }>{item}</option>);
+									return (<option value={item} key={index} aria-label={item}>{item}</option>);
 
 								})
 							}
 						</select>
 					</div>
 					<div className="ep-list-button-container">
-						<button className="ep-list-button" onClick={ this.addClick } aria-label="Add"><span className="ep-list-button-text">+</span></button>
-						<button className="ep-list-button" onClick={ this.removeClick } aria-label="Remove"><span className="ep-list-button-text">-</span></button>
-						{ this.orderable
-					&& <React.Fragment>
-						<button className="ep-list-button" onClick={ this.upClick } aria-label="Move up"><span className="ep-list-button-text">↑</span></button>
-						<button className="ep-list-button" onClick={ this.downClick } aria-label="Move down"><span className="ep-list-button-text">↓</span></button>
-					</React.Fragment>
+						<button className="ep-list-button" onClick={this.addClick} aria-label="Add">
+							<span className="ep-list-button-text">+</span></button>
+						<button className="ep-list-button" onClick={this.removeClick} aria-label="Remove">
+							<span className="ep-list-button-text">-</span></button>
+						{this.orderable
+																												&& <React.Fragment>
+																													<button className="ep-list-button" onClick={this.upClick} aria-label="Move up">
+																														<span className="ep-list-button-text">↑</span></button>
+																													<button className="ep-list-button" onClick={this.downClick} aria-label="Move down">
+																														<span className="ep-list-button-text">↓</span></button>
+																												</React.Fragment>
+						}
+						{this.allowBulk
+																												&& <React.Fragment>
+																													<div>
+																														<button className="ep-list-button" onClick={this.addBulk} aria-label="Add bulk">
+																															<span className="ep-list-button-text">Add bulk</span></button>
+																													</div>
+																												</React.Fragment>
 						}
 					</div>
-					<ReactModal style={ this.modalStyle } shouldCloseOnOverlayClick={true} isOpen={ this.state.showInputModal } contentLabel="Add Item" closeTimeoutMS={ this.modalCloseTimeoutMS }>
+					<ReactModal style={this.modalStyle} shouldCloseOnOverlayClick={true} isOpen={this.state.showInputModal} contentLabel="Add Item" closeTimeoutMS={this.modalCloseTimeoutMS}>
 						<div className="ep-list-modal-container">
 							<div className="ep-list-modal-input-container">
-								<label className="ep-list-modal-input-label">{ this.addItemLabel }</label>
-								<input className="ep-list-modal-input" type="text" value={ this.state.itemToAdd } autoFocus={ true } onChange={ this.itemToAddChanged } aria-label={ this.addItemLabel } />
+								<label className="ep-list-modal-input-label">{this.addItemLabel}</label>
+								<input className="ep-list-modal-input" type="text" value={this.state.itemToAdd} autoFocus={true} onChange={this.itemToAddChanged} aria-label={this.addItemLabel}/>
 							</div>
 							<div className="ep-list-modal-button-container">
-								<button className="ep-list-modal-button" onClick={ this.cancelAdd.bind(this) } aria-label="Cancel">Cancel</button>
-								{ (this.addItemValidator.test(this.state.itemToAdd)
-									&& <button className="ep-list-modal-button" onClick={ this.saveItem.bind(this) } aria-label="Save">Save</button>)
-									|| <button className="ep-list-modal-button" disabled="disabled" aria-label="Save">Save</button>
+								<button className="ep-list-modal-button" onClick={this.cancelAdd.bind(this)} aria-label="Cancel">Cancel</button>
+								{(this.addItemValidator.test(this.state.itemToAdd)
+																																								&&																																								<button className="ep-list-modal-button" onClick={this.saveItem.bind(this)} aria-label="Save">Save</button>)
+																																				|| <button className="ep-list-modal-button" disabled="disabled" aria-label="Save">Save</button>
 								}
 							</div>
 						</div>
 					</ReactModal>
 				</div>
-				{ this.help && <span className="help">{ this.help }</span> }
+				{this.help && <span className="help">{this.help}</span>}
 			</div>
 		);
 
@@ -153,6 +167,107 @@ class ListField extends React.Component {
 
 	}
 
+	addBulk() {
+
+		// Console.log('addBulk()');
+
+		this.choose();
+
+	}
+
+	choose() {
+
+		const properties = [ 'openFile', 'dontAddToRecent' ];
+
+		let file = api?.showOpenDialog({
+			properties,
+			filters: { name: 'Swatch', extensions: [ 'txt' ] },
+		});
+
+		if (!file) {
+
+			return;
+
+		}
+
+		if (file.length <= 0) {
+
+			return;
+
+		}
+
+		if (Array.isArray(file)) {
+
+			file = file[0];
+
+		}
+
+		console.log('file', file);
+
+		// Api.readSwatchFile(file).then(
+		// 	_data => {
+		//
+		// 		console.log('data', _data);
+		//
+		// 	},
+		// 	_error => {
+		//
+		// 		console.error('data', _error);
+		//
+		// 	},
+		// );
+
+		// let results = api?.readSwatchFile(file).then(
+		// 	(_data, _more) => {
+		//
+		// 		console.log('returned data', _data, _more);
+		//
+		// 	},
+		// );
+		const results = api?.readSwatchFile(file);
+
+		if (!results) {
+
+			return;
+
+		}
+
+		if (results.length > 0) {
+
+			console.log('results', results);
+
+			const arr = results.trim().split('\n');
+
+			const cleanArr = [];
+
+			const isHex = /^#(?:[0-9a-f]{3}){1,2}$/i;
+
+			if (Array.isArray(arr)) {
+
+				for (const i in arr) {
+
+					if (typeof arr[i] !== 'undefined' && isHex.test(arr[i])) {
+
+						cleanArr.push(arr[i].trim());
+
+					}
+
+				}
+
+			}
+
+			this.onChange(cleanArr);
+
+		}
+
+	}
+
+	get onChange() {
+
+		return this.props.onChange;
+
+	}
+
 	get field() {
 
 		return this.props.field;
@@ -180,6 +295,12 @@ class ListField extends React.Component {
 	get orderable() {
 
 		return this.field.orderable || false;
+
+	}
+
+	get allowBulk() {
+
+		return this.field.allowBulk || false;
 
 	}
 

@@ -154,6 +154,29 @@ class ElectronPreferences extends EventEmitter2 {
 
 		});
 
+		// ipcMain.handle('readFile', async (event, _path) => {
+		ipcMain.on('readFile', (event, _path) => {
+
+			console.log('event', event);
+			console.log('_path', _path);
+
+			fs.readFile(_path, 'utf-8', (err, data) => {
+
+				if (err) {
+
+					console.log('An error occurred reading the file :' + err.message);
+
+					return;
+
+				}
+
+				console.log('main readFile says', data);
+				event.returnValue = data;
+
+			});
+
+		});
+
 		ipcMain.on('sendButtonClick', (event, message) => {
 
 			// Main process
