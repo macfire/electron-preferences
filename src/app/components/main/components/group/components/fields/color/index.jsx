@@ -1,9 +1,9 @@
-/* global document */
+/* global api, document */
 'use strict';
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ChromePicker } from 'react-color';
+import { CompactPicker } from 'react-color';
 
 class ColorField extends React.Component {
 
@@ -17,19 +17,31 @@ class ColorField extends React.Component {
 		this.handleClickOutside = this.handleClickOutside.bind(this);
 		this.onChange = this.onChange.bind(this);
 
+		this.preferences = api.getPreferences();
+		this.colors = [ '#4D4D4D', '#999999', '#FFFFFF', '#F44E3B', '#FE9200', '#FCDC00', '#DBDF00', '#A4DD00', '#68CCCA', '#73D8FF', '#AEA1FF', '#FDA1FF', '#333333', '#808080', '#cccccc', '#D33115', '#E27300', '#FCC400', '#B0BC00', '#68BC00', '#16A5A5', '#009CE0', '#7B64FF', '#FA28FF', '#000000', '#666666', '#B3B3B3', '#9F0500', '#C45100', '#FB9E00', '#808900', '#194D33', '#0C797D', '#0062B1', '#653294', '#AB149E' ];
+
+		if (this.preferences.theme && Array.isArray(this.preferences.theme.swatches)) {
+
+			this.colors = this.preferences.theme.swatches;
+
+		}
+
+		console.log('all prefs', this.preferences);
+		console.log('color props', props);
+
 	}
 
 	render() {
 
 		return (
-			<div className={`field field-color key-${this.field.key}`} ref={this.wrapperRef}>
+			<div className={`field field-color key-${this.field.key}`} ref={ this.wrapperRef }>
 				<div className="field-label">{ this.label }</div>
 				<div className="color-container">
 					<div className="color-swatch" onClick={ this.handleClick }>
 						<div className="color" style={ this.style }/>
 					</div>
 					{ this.state.displayColorPicker ? <div className="color-popover">
-						<ChromePicker color={ this.value } onChange={ this.onChange } disableAlpha={ this.format === 'hex' }/>
+						<CompactPicker color={ this.value } colors={ this.colors } onChange={ this.onChange } disableAlpha={ this.format === 'hex' }/>
 					</div> : null }
 				</div>
 				{ this.help && <span className="help">{ this.help }</span> }
