@@ -13,6 +13,8 @@ class FileField extends React.Component {
 
 		this.choose = this.choose.bind(this);
 
+		this.reset = this.reset.bind(this);
+
 	}
 
 	render() {
@@ -22,6 +24,8 @@ class FileField extends React.Component {
 		const btLabel = buttonLabel || (value && value.length > 0
 			? (multiSelections ? 'Choose other Files' : 'Choose another File')
 			: (multiSelections ? 'Choose Files' : 'Choose a File'));
+
+		const btResetLabel = 'Reset';
 
 		return (
 			<div className={`field field-file key-${this.field.key}`}>
@@ -40,6 +44,9 @@ class FileField extends React.Component {
 				</div>
 				<button className="bt" onClick={this.choose} aria-label={ btLabel }>
 					{btLabel}
+				</button>
+				<button className="bt bt-reset" onClick={this.reset} aria-label={ btResetLabel }>
+					{btResetLabel}
 				</button>
 				{help && <span className="help">{help}</span>}
 			</div>
@@ -182,6 +189,12 @@ class FileField extends React.Component {
 			this.onChange(multiSelections ? result : result[0]);
 
 		}
+
+	}
+
+	reset() {
+
+		this.onChange();
 
 	}
 
