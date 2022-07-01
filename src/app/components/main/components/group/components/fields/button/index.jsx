@@ -12,14 +12,37 @@ class ButtonField extends React.Component {
 
 		};
 
+		const getOnlineStatus = () => {
+
+			let isDisabled = false;
+
+			if (this.disableOffline) {
+
+				if (!navigator.onLine) {
+
+					isDisabled = true;
+
+				}
+
+			}
+
+			return isDisabled;
+
+		};
+
 		const fieldLabel = this.hideLabel === 'true' ? '' : <div className="field-label">{ this.label }</div>;
 
 		const btLabel = this.buttonLabel ? this.buttonLabel : 'Click Here';
 
+		const isDisabled = getOnlineStatus();
+
+		const dataAttrs = {};
+		dataAttrs['data-' + this.key] = btLabel;
+
 		return (
-			<div className={`field field-button key-${this.key}`}>
+			<div className={`field field-button key-${this.key}  disabled-${isDisabled}`} {...dataAttrs}>
 				{ fieldLabel }
-				<button className="bt" onClick={ choose }>
+				<button className="bt" onClick={ choose } disabled={getOnlineStatus()}>
 					{ btLabel }
 				</button>
 				{ this.help && <span className="help">{ this.help }</span> }
@@ -31,6 +54,12 @@ class ButtonField extends React.Component {
 	get field() {
 
 		return this.props.field;
+
+	}
+
+	get disableOffline() {
+
+		return this.field.disableOffline;
 
 	}
 

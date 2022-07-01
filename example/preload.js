@@ -10,7 +10,7 @@ let onPreferencesChangedHandler = () => {};
 contextBridge.exposeInMainWorld('api', {
 	showPreferences() {
 
-		ipcRenderer.send('showPreferences');
+		ipcRenderer.send('showPreferences', [ [ 'myKey1', 'myVal1' ], [ 'myKey2', 'myVal2' ]]);
 
 	},
 	closePreferences() {

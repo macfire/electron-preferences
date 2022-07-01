@@ -8,7 +8,7 @@ prefsElement.innerHTML = JSON.stringify(api.getPreferences(), null, 4);
 
 bt.addEventListener('click', () => {
 
-	api.showPreferences();
+	api.showPreferences('my renderer arg');
 
 });
 

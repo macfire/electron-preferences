@@ -13,6 +13,9 @@ import '../../scss/style.scss';
 
 const allSections = api.getSections();
 const preferences = api.getPreferences();
+const dataset = api.getDataset();
+
+// console.log('dataset', dataset);
 
 const sections = allSections.filter(section => _.isBoolean(section.enabled) ? section.enabled : true);
 
@@ -78,7 +81,23 @@ class App extends React.Component {
 
 }
 
+const win = document.querySelector('#window');
+
+if (Array.isArray(dataset)) {
+
+	for (let i = 0; i < dataset.length; i++) {
+
+		if (Array.isArray(dataset[i]) && dataset[i].length === 2) {
+
+			win.dataset[dataset[i][0].replace(' ', '-')] = dataset[i][1];
+
+		}
+
+	}
+
+}
+
 ReactDOM.render(
 	<App />,
-	document.querySelector('#window'),
+	win,
 );

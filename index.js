@@ -41,6 +41,8 @@ class ElectronPreferences extends EventEmitter2 {
 
 		}
 
+		this.dataset = [];
+
 		this.options = options;
 
 		if (!this.dataStore) {
@@ -100,11 +102,19 @@ class ElectronPreferences extends EventEmitter2 {
 
 		this.save();
 
-		ipcMain.on('showPreferences', _ => {
+		ipcMain.on('showPreferences', (event, _datafields) => {
 
-			this.show();
+			// Console.log("showPreferences() args:", _arg);
+
+			this.show(_datafields);
 
 		});
+
+		// IpcMain.on('showPreferences', _ => {
+		//
+		// 	this.show();
+		//
+		// });
 
 		ipcMain.on('closePreferences', _ => {
 
@@ -129,6 +139,12 @@ class ElectronPreferences extends EventEmitter2 {
 		ipcMain.on('getDefaults', event => {
 
 			event.returnValue = this.defaults;
+
+		});
+
+		ipcMain.on('getDataset', event => {
+
+			event.returnValue = this.dataset;
 
 		});
 
@@ -308,7 +324,21 @@ class ElectronPreferences extends EventEmitter2 {
 
 	}
 
-	show() {
+	show(_datafields) {
+
+		if (Array.isArray(_datafields)) {
+
+			for (let i = 0; i < _datafields.length; i++) {
+
+				if (Array.isArray(_datafields[i]) && _datafields[i].length === 2) {
+
+					this.dataset.push([ _datafields[i][0], _datafields[i][1] ]);
+
+				}
+
+			}
+
+		}
 
 		if (this.prefsWindow) {
 

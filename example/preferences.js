@@ -24,7 +24,7 @@ const preferences = new ElectronPreferences({
 		// ...
 	},
 
-	debug: false, // True will open the dev tools
+	debug: true, // True will open the dev tools
 
 	webPreferences: {
 		webSecurity: true,
@@ -57,6 +57,15 @@ const preferences = new ElectronPreferences({
 					{
 						label: 'About You',
 						fields: [
+							{
+								label: 'Offline/Online button',
+								key: 'testButton',
+								type: 'button',
+								buttonLabel: 'Disable if offline',
+								help: 'This button sends on a custom ipc channel',
+								disableOffline: true,
+								hideLabel: false,
+							},
 							{
 								label: 'First Name',
 								key: 'firstName',
@@ -293,5 +302,6 @@ const preferences = new ElectronPreferences({
 		},
 	],
 });
+
 
 module.exports = preferences;

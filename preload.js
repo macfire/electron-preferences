@@ -7,6 +7,7 @@ const { ipcRenderer } = electron;
 
 contextBridge.exposeInMainWorld('api', {
 	getSections: () => ipcRenderer.sendSync('getSections'),
+	getDataset: () => ipcRenderer.sendSync('getDataset'),
 	getPreferences: () => ipcRenderer.sendSync('getPreferences'),
 	getDefaults: () => ipcRenderer.sendSync('getDefaults'),
 	setPreferences: preferences => ipcRenderer.send('setPreferences', preferences),
